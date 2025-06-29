@@ -47,7 +47,7 @@ const Landing = () => {
         </Button>
       </form>
       <img
-        src="./homebanner.jpeg"
+        src="/homebanner.jpeg"
         alt="banner"
         className="w-full my-11 md:px-11"
       />

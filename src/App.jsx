@@ -7,6 +7,7 @@ import AppLayout from "./layouts/AppLayout";
 import Auth from "./pages/Auth";
 import UrlProvider from "./Context/context";
 import RequireAuth from "./components/RequireAuth";
+import React from "react";
 
 const router = createBrowserRouter([
   {
