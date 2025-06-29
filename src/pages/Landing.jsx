@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
+import { useState } from "react";
 
 import {
   Accordion,
@@ -11,7 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Landing = () => {
-  const [longUrl, setLongUrl] = useState();
+  const [longUrl, setLongUrl] = useState("");
   const navigate = useNavigate();
 
   const handleShorten = (e) => {
