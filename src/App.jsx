@@ -8,42 +8,52 @@ import Auth from "./pages/Auth.jsx";
 import UrlProvider from "./Context/context.jsx";
 import RequireAuth from "./components/RequireAuth.jsx";
 import React from "react";
+import NotFound from "./components/NotFound.jsx";
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      element: <AppLayout />,
+      children: [
+        {
+          path: "/",
+          element: <Landing />,
+        },
+        {
+          path: "/dashboard",
+          element: (
+            <RequireAuth>
+              <Dashboard />
+            </RequireAuth>
+          ),
+        },
+        {
+          path: "/link/:id",
+          element: (
+            <RequireAuth>
+              <Link />
+            </RequireAuth>
+          ),
+        },
+        {
+          path: "/auth",
+          element: <Auth />,
+        },
+        {
+          path: "/:id",
+          element: <RedirectLink />,
+        },
+        {
+          path: "*",
+          element: <NotFound />,
+        },
+      ],
+    },
+  ],
   {
-    element: <AppLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Landing />,
-      },
-      {
-        path: "/dashboard",
-        element: (
-          <RequireAuth>
-            <Dashboard />
-          </RequireAuth>
-        ),
-      },
-      {
-        path: "/link/:id",
-        element: (
-          <RequireAuth>
-            <Link />
-          </RequireAuth>
-        ),
-      },
-      {
-        path: "/:id",
-        element: <RedirectLink />,
-      },
-      {
-        path: "/auth",
-        element: <Auth />,
-      },
-    ],
-  },
-]);
+    basename: "/",
+  }
+);
 
 function App() {
   return (

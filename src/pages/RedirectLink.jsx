@@ -1,3 +1,4 @@
+import NotFound from "@/components/NotFound";
 import { storeClicks } from "@/db/apiClicks";
 import { getLongUrl } from "@/db/apiUrls";
 import useFetch from "@/hooks/useFetch";
@@ -7,7 +8,6 @@ import { BarLoader } from "react-spinners";
 
 const RedirectLink = () => {
   const { id } = useParams();
-
   const { loading, data, fn } = useFetch(getLongUrl, id);
 
   const { loading: loadingStats, fn: fnStats } = useFetch(storeClicks, {
@@ -34,7 +34,14 @@ const RedirectLink = () => {
       </>
     );
   }
-
+  if (!data) {
+    return (
+      <NotFound
+        title="URL Not Found"
+        message="The URL you entered does not exist. Please check the URL you typed."
+      />
+    );
+  }
   return null;
 };
 
