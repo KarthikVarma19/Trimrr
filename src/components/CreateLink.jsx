@@ -8,19 +8,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { UrlState } from "@/Context/context";
+import { UrlState } from "@/Context/context.jsx";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import Error from "./Error";
-import { Card } from "./ui/card";
+import { Button } from "./ui/button.jsx";
+import { Input } from "./ui/input.jsx";
+import Error from "./Error.jsx";
+import { Card } from "./ui/card.jsx";
 
 import * as yup from "yup";
 import { QRCode } from "react-qrcode-logo";
 import useFetch from "@/hooks/useFetch";
-import { createUrl } from "@/db/apiUrls";
+import { createUrl } from "@/db/apiUrls.js";
 import { BeatLoader } from "react-spinners";
-import { domainUrl } from "@/db/domain";
+import { domainUrl } from "@/db/domain.js";
 
 const CreateLink = () => {
   const { user } = UrlState();

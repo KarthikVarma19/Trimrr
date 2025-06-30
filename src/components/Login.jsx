@@ -8,16 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "./ui/input.jsx";
+import { Button } from "./ui/button.jsx";
 import { BeatLoader } from "react-spinners";
-import Error from "./Error";
+import Error from "./Error.jsx";
 
 import * as Yup from "yup";
-import useFetch from "@/hooks/useFetch";
-import { login } from "@/db/apiAuth";
+import useFetch from "@/hooks/useFetch.js";
+import { login } from "@/db/apiAuth.js";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { UrlState } from "@/Context/context";
+import { UrlState } from "@/Context/context.jsx";
 
 const Login = () => {
   const [errors, setErrors] = useState([]);
@@ -88,7 +88,7 @@ const Login = () => {
           <Input
             name="email"
             type="email"
-            placeholder="Enter Email"
+            placeholder="Enter Email (Eg., test@gmail.com)"
             onChange={handleInputChange}
           />
           {errors.email && <Error message={errors.email} />}
@@ -97,7 +97,7 @@ const Login = () => {
           <Input
             name="password"
             type="password"
-            placeholder="Enter Password"
+            placeholder="Enter Password (Eg., test123)"
             onChange={handleInputChange}
           />
           {errors.password && <Error message={errors.password} />}

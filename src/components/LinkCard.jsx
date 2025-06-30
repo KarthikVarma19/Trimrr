@@ -1,12 +1,11 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import { Button } from "./ui/button";
+import { Button } from "./ui/button.jsx";
 import { Copy, Download, Trash } from "lucide-react";
-import useFetch from "@/hooks/useFetch";
-import { deleteUrl } from "@/db/apiUrls";
+import useFetch from "@/hooks/useFetch.js";
+import { deleteUrl } from "@/db/apiUrls.js";
 import { BeatLoader } from "react-spinners";
 
-import { domainUrl } from "@/db/domain";
+import { domainUrl } from "@/db/domain.js";
 
 import {
   HoverCard,

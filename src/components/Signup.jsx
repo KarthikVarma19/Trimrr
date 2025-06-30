@@ -8,16 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "./ui/input.jsx";
+import { Button } from "./ui/button.jsx";
 import { BeatLoader } from "react-spinners";
-import Error from "./Error";
+import Error from "./Error.jsx";
 
 import * as Yup from "yup";
-import useFetch from "@/hooks/useFetch";
-import { signup } from "@/db/apiAuth";
+import useFetch from "@/hooks/useFetch.js";
+import { signup } from "@/db/apiAuth.js";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { UrlState } from "@/Context/context";
+import { UrlState } from "@/Context/context.jsx";
 
 const Signup = () => {
   const [errors, setErrors] = useState([]);
