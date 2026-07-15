@@ -1,48 +1,28 @@
-import NotFound from "@/components/NotFound";
-import { storeClicks } from "@/db/apiClicks";
-import { getLongUrl } from "@/db/apiUrls";
-import useFetch from "@/hooks/useFetch";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { BarLoader } from "react-spinners";
+import { domainUrl } from "@/db/domain.js";
 
+/**
+ * Legacy fallback route. Short links now resolve directly on the Spring Boot
+ * backend, which performs the real server-side 302 redirect and records
+ * analytics. If someone lands on the SPA's /:id path (e.g. an old link
+ * pointing at the frontend host), we simply hand off to the backend rather
+ * than doing the redirect + click-logging in the browser.
+ */
 const RedirectLink = () => {
   const { id } = useParams();
-  const { loading, data, fn } = useFetch(getLongUrl, id);
-
-  const { loading: loadingStats, fn: fnStats } = useFetch(storeClicks, {
-    id: data?.id,
-    original_url: data?.original_url,
-  });
 
   useEffect(() => {
-    fn();
-  }, []);
+    window.location.replace(`${domainUrl}${id}`);
+  }, [id]);
 
-  useEffect(() => {
-    if (!loading && data) {
-      fnStats();
-    }
-  }, [loading]);
-
-  if (loading || loadingStats) {
-    return (
-      <>
-        <BarLoader width={"100%"} color="#36d7b7" />
-        <br />
-        Redirecting...
-      </>
-    );
-  }
-  if (!data) {
-    return (
-      <NotFound
-        title="URL Not Found"
-        message="The URL you entered does not exist. Please check the URL you typed."
-      />
-    );
-  }
-  return null;
+  return (
+    <div className="flex flex-col items-center gap-4 py-24">
+      <BarLoader width={160} height={3} color="oklch(0.755 0.115 173)" />
+      <p className="text-sm text-muted-foreground">Redirecting…</p>
+    </div>
+  );
 };
 
 export default RedirectLink;

@@ -1,19 +1,22 @@
-import { AlertCircleIcon } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const NotFound = ({
-  title = " 404 - Page Not Found",
-  message = "The page you are looking for does not exist. Please check the URLand try again.",
+  title = "Page not found",
+  message = "The page you're looking for doesn't exist or may have been moved.",
 }) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="flex flex-col items-center justify-start h-screen">
-      <Alert variant="destructive" className="max-w-md">
-        <AlertCircleIcon className="w-6 h-6 text-red-500" />
-        <AlertTitle className="text-4xl font-bold">{title}</AlertTitle>
-        <AlertDescription>
-          <p className="text-center text-white">{message}</p>
-        </AlertDescription>
-      </Alert>
+    <div className="flex min-h-[70vh] flex-col items-center justify-center text-center">
+      <span className="font-serif text-7xl tracking-tight text-primary sm:text-8xl">
+        404
+      </span>
+      <h1 className="mt-4 font-serif text-3xl tracking-tight">{title}</h1>
+      <p className="mt-3 max-w-md text-muted-foreground">{message}</p>
+      <Button className="mt-8" onClick={() => navigate("/")}>
+        Back to home
+      </Button>
     </div>
   );
 };

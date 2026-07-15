@@ -77,35 +77,33 @@ const Login = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Login</CardTitle>
-        <CardDescription>
-          to your account if you already have one
-        </CardDescription>
+        <CardTitle className="font-serif text-2xl">Welcome back</CardTitle>
+        <CardDescription>Log in to your Trimrr account.</CardDescription>
         {error && <Error message={error.message} />}
       </CardHeader>
-      <CardContent className="space-y-2">
-        <div className="space-y-1">
+      <CardContent className="space-y-3">
+        <div className="space-y-1.5">
           <Input
             name="email"
             type="email"
-            placeholder="Enter Email (Eg., test@gmail.com)"
+            placeholder="you@example.com"
             onChange={handleInputChange}
           />
           {errors.email && <Error message={errors.email} />}
         </div>
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           <Input
             name="password"
             type="password"
-            placeholder="Enter Password (Eg., test123)"
+            placeholder="Your password"
             onChange={handleInputChange}
           />
           {errors.password && <Error message={errors.password} />}
         </div>
       </CardContent>
       <CardFooter>
-        <Button onClick={handleLogin} className="cursor-pointer">
-          {loading ? <BeatLoader size={10} color="#36d7b7" /> : "Login"}
+        <Button onClick={handleLogin} className="w-full" disabled={loading}>
+          {loading ? <BeatLoader size={8} color="currentColor" /> : "Log in"}
         </Button>
       </CardFooter>
     </Card>

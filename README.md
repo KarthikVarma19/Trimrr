@@ -1,114 +1,81 @@
+# Trimrr
 
-# Full Stack React JS URL Shortener Project
+A full-stack URL shortener with fast server-side redirects, click analytics,
+and QR generation. Built as a monorepo: a React frontend and a Java / Spring
+Boot backend sharing a Supabase PostgreSQL database.
 
-A comprehensive full stack URL shortener app built with ReactJS, Tailwind CSS, Supabase, and Shadcn UI, featuring authentication, URL shortening, analytics tracking, QR code generation, and image uploads.
-
-## Installation
-
-Follow these steps to set up the project locally:
-
-### Prerequisites
-
-- Node.js and npm installed
-- Supabase account and project created
-- Hostinger account (optional for deployment)
-
-### Setup Steps
-
-1. Create a new React app with JavaScript template:
-
-```bash
-npm create vite@latest
-# Choose React and JavaScript options
+```
+Trimrr/
+├── frontend/   React 19 + Vite + Tailwind 4 + shadcn/ui  (UI, auth, dashboard)
+└── backend/    Java 21 + Spring Boot 3                     (redirect + analytics)
 ```
 
-2. Install dependencies:
+## Architecture
+
+The frontend uses Supabase **only for authentication** (login/signup issues a
+JWT). All application data — creating links, listing, deleting, and analytics —
+goes through the Spring Boot REST API, which verifies that Supabase JWT on
+every request and enforces per-user ownership. The **redirect** — the
+performance-critical path — is also owned by the backend:
+
+```
+Visitor clicks a short link
+        │
+        ▼
+Spring Boot  GET /{code}
+   ├─ resolve code   (Caffeine cache → Postgres on miss)
+   ├─ 302 redirect   (returned immediately)
+   └─ record click   (async: device + geo, off the hot path)
+```
+
+This replaced the original client-side redirect, which loaded the whole React
+bundle and blocked navigation on a third-party geo API call. See
+[backend/README.md](backend/README.md) for the design rationale.
+
+## Running locally
+
+### Frontend
 
 ```bash
+cd frontend
 npm install
-npm install @supabase/supabase-js react-router-dom tailwindcss shadcn-ui react-spinners yup
-```
-
-3. Initialize Tailwind CSS:
-
-```bash
-npx tailwindcss init -p
-```
-
-4. Install Shadcn UI components:
-
-```bash
-npx shadcn-ui@latest init
-npx shadcn-ui@latest add button accordion input tabs card avatar dropdown
-```
-
-5. Set up Supabase:
-
-- Create a Supabase project
-- Create tables: `URLs` and `Clicks` with appropriate columns and row-level security policies
-- Create storage buckets for profile pictures and QR codes with proper access policies
-- Copy your Supabase URL and API key into a `.env` file as environment variables
-
-6. Configure React Router and app layout
-
-7. Run the app locally:
-
-```bash
 npm run dev
 ```
 
-## Usage
+Environment (`.env` in `frontend/`):
 
-- Enter a long URL on the landing page to shorten it
-- Sign up or log in to manage your URLs
-- View analytics including clicks, device types, and locations
-- Download QR codes for your shortened URLs
-- Copy, delete, or customize your short URLs
+```
+VITE_SUPABASE_URL=...                     # Supabase project URL (auth)
+VITE_SUPABASE_KEY=...                     # Supabase anon key (auth)
+VITE_API_URL=http://localhost:8080        # Spring Boot REST API
+VITE_DOMAIN_URL=http://localhost:8080/    # base for short links = backend host
+```
 
-## Deploy
+### Backend
 
-- Build the project for production:
+Requires JDK 21. See [backend/RUNNING.md](backend/RUNNING.md) for the full
+walkthrough (Supabase JDBC connection, verification, troubleshooting).
 
 ```bash
-npm run build
+cd backend
+export DB_URL=... DB_USERNAME=... DB_PASSWORD=...
+export SUPABASE_URL=... SUPABASE_JWT_SECRET=... SUPABASE_SERVICE_ROLE_KEY=...
+export FRONTEND_ORIGINS=http://localhost:5173
+./mvnw spring-boot:run
 ```
 
-- Upload the `dist` folder contents to your hosting provider (e.g., Hostinger)
-- Add `.htaccess` file with proper rewrite rules for React routing
-- Connect your domain and ensure SSL is enabled
+## Tech stack
 
-## Technologies
+| Layer     | Tech                                                            |
+|-----------|-----------------------------------------------------------------|
+| Frontend  | React 19, Vite, Tailwind CSS 4, shadcn/ui, React Router, Recharts |
+| Backend   | Java 21, Spring Boot 3, Spring Data JPA, Caffeine cache          |
+| Data/Auth | Supabase (PostgreSQL, Auth, Storage)                            |
 
-- **ReactJS** - Frontend UI library
-- **Tailwind CSS** - Utility-first CSS framework
-- **Shadcn UI** - React component library built on Tailwind
-- **Supabase** - Backend as a service with PostgreSQL database, authentication, and storage
-- **React Router DOM** - Client-side routing
-- **Yup** - Form validation
-- **React Spinners** - Loading indicators
+## Features
 
-
-
-## Contributing
-
-- Fork the repository
-- Clone your fork locally
-- Create a feature branch
-- Make changes and commit
-- Push to your fork and create a pull request
-
-## Documentation
-
-More detailed documentation can be found at the Supabase docs, React docs, and Tailwind CSS official sites.
-
-## Acknowledgments
-
-- Supabase team for backend services
-- Tailwind Labs for Tailwind CSS
-- Shadcn UI contributors
-
-## License
-
-Refer to the [Choose a License](https://choosealicense.com/) page for license agreements.
-```
-This README.md format includes installation, usage, deployment, technologies, database schema, contributing, documentation, acknowledgments, and license sections reflecting the full stack URL shortener project from the tutorial.# Trimrr
+- Short links with collision-checked, human-readable codes
+- Fast, cached, server-side redirects (302) with async click logging
+- Per-link analytics: total clicks, devices, and locations
+- QR code for every link, downloadable as PNG
+- Email/password auth with protected routes

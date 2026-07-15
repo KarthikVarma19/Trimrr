@@ -3,14 +3,22 @@ import { Outlet } from "react-router-dom";
 
 const AppLayout = () => {
   return (
-    <div className="flex flex-col items-center">
-      <main className="min-h-screen container">
+    <div className="flex min-h-screen flex-col">
+      <div className="mx-auto w-full max-w-5xl flex-1 px-4 sm:px-6">
         <Header />
-        <Outlet />
-      </main>
-      <div className="p-5 text-center bg-gray-800 mt-10 w-full">
-        Made with 💗 by Karthik Varma
+        <main className="py-4">
+          <Outlet />
+        </main>
       </div>
+
+      <footer className="border-t border-border">
+        <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-between gap-2 px-4 py-8 text-sm text-muted-foreground sm:flex-row sm:px-6">
+          <span className="font-serif text-base text-foreground">trimrr</span>
+          <span>
+            Built by Karthik Varma · React, Spring Boot &amp; PostgreSQL
+          </span>
+        </div>
+      </footer>
     </div>
   );
 };

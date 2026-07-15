@@ -20,20 +20,22 @@ const Auth = () => {
   }, [loading, isAuthenticated]);
 
   return (
-    <div className="mt-22 flex flex-col items-center gap-10">
-      <h1 className="text-5xl font-extrabold">
-        {searchParams.get("createNew")
-          ? "Hold up! Let's login first..."
-          : "Login / Signup"}
-      </h1>
-      <Tabs defaultValue="login" className="w-[400px]">
+    <div className="mx-auto flex max-w-md flex-col items-center gap-8 py-16 sm:py-24">
+      <div className="text-center">
+        <h1 className="font-serif text-4xl tracking-tight sm:text-5xl">
+          {longLink ? "Let's log you in first" : "Welcome to Trimrr"}
+        </h1>
+        <p className="mt-3 text-muted-foreground">
+          {longLink
+            ? "Your link is ready — sign in and we'll finish shortening it."
+            : "Log in or create an account to manage and track your links."}
+        </p>
+      </div>
+
+      <Tabs defaultValue="login" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="login" className="cursor-pointer">
-            Login
-          </TabsTrigger>
-          <TabsTrigger value="signup" className="cursor-pointer">
-            Signup
-          </TabsTrigger>
+          <TabsTrigger value="login">Log in</TabsTrigger>
+          <TabsTrigger value="signup">Sign up</TabsTrigger>
         </TabsList>
         <TabsContent value="login">
           <Login />

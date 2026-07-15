@@ -79,43 +79,48 @@ const Signup = () => {
   };
 
   return (
-    <Card className="border border-white">
+    <Card>
       <CardHeader>
-        <CardTitle>Signup</CardTitle>
+        <CardTitle className="font-serif text-2xl">
+          Create your account
+        </CardTitle>
         <CardDescription>
-          create a new account if you haven&rsquo;t already
+          Start shortening and tracking links in seconds.
         </CardDescription>
         {error && <Error message={error.message} />}
       </CardHeader>
-      <CardContent className="space-y-2">
-        <div className="space-y-1">
+      <CardContent className="space-y-3">
+        <div className="space-y-1.5">
           <Input
             name="name"
             type="text"
-            placeholder="Enter Name"
+            placeholder="Your name"
             onChange={handleInputChange}
           />
           {errors.name && <Error message={errors.name} />}
         </div>
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           <Input
             name="email"
             type="email"
-            placeholder="Enter Email"
+            placeholder="you@example.com"
             onChange={handleInputChange}
           />
           {errors.email && <Error message={errors.email} />}
         </div>
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           <Input
             name="password"
             type="password"
-            placeholder="Enter Password"
+            placeholder="Create a password (min. 6 characters)"
             onChange={handleInputChange}
           />
           {errors.password && <Error message={errors.password} />}
         </div>
-        <div className="space-y-1">
+        <div className="space-y-1.5">
+          <label className="text-sm text-muted-foreground">
+            Profile picture
+          </label>
           <Input
             name="profile_pic"
             type="file"
@@ -127,11 +132,11 @@ const Signup = () => {
         </div>
       </CardContent>
       <CardFooter>
-        <Button onClick={handleSignup} className="cursor-pointer">
+        <Button onClick={handleSignup} className="w-full" disabled={loading}>
           {loading ? (
-            <BeatLoader size={10} color="#36d7b7" />
+            <BeatLoader size={8} color="currentColor" />
           ) : (
-            "Create Account"
+            "Create account"
           )}
         </Button>
       </CardFooter>

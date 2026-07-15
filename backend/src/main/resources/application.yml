@@ -1,0 +1,52 @@
+server:
+  port: ${PORT:8080}
+  error:
+    # Return the exception reason (e.g. "That custom link is already taken")
+    # in the JSON error body so the frontend can display it.
+    include-message: always
+
+spring:
+  application:
+    name: trimrr-backend
+  jackson:
+    # Serialize camelCase Java fields as snake_case JSON (original_url,
+    # short_url, created_at…) to match the frontend's expected shape.
+    property-naming-strategy: SNAKE_CASE
+  datasource:
+    # Supabase -> Project Settings -> Database -> Connection string (JDBC).
+    # Use the connection POOLER host (port 6543) for serverless/always-on apps.
+    # Provide these via environment variables; never commit real credentials.
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+  jpa:
+    hibernate:
+      # Tables already exist in Supabase. Never let Hibernate alter the schema.
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+
+supabase:
+  # Dashboard → Settings. JWKS verifies user session tokens (asymmetric keys);
+  # the secret/service key lets the backend upload QR images to Storage.
+  url: ${SUPABASE_URL:https://your-project.supabase.co}
+  jwks-uri: ${SUPABASE_JWKS_URL:https://your-project.supabase.co/auth/v1/.well-known/jwks.json}
+  service-role-key: ${SUPABASE_SERVICE_ROLE_KEY:change-me-in-env}
+  qr-bucket: qrs
+
+app:
+  cors:
+    # Comma-separated list of frontend origins allowed to call the API.
+    allowed-origins: ${FRONTEND_ORIGINS:http://localhost:5173}
+
+# Expose health + cache metrics for monitoring / interview demos.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,caches
